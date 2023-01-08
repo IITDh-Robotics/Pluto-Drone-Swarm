@@ -16,7 +16,15 @@ class Connection:
 		
 	def send(self, data):
 		self.tn.write(data)
+		print('sending from send():', data)
+		#self.tn.read_eager()
 
 	def disconnect(self):
 		self.tn.close()
 		print("Disconnected from pluto at " + self.host + ":" + self.port + ".")
+
+	def receive(self):
+		print('about to read...')
+		dat1 = self.tn.read_some()
+		
+		return dat1
