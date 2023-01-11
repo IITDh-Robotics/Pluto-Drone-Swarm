@@ -1,32 +1,31 @@
-import requests
+
 import cv2
 import numpy as np
-import imutils
 import time
 
 
 class arucoDetection:
 
-    def __init__(self, camUrl, arucoMarkerSize = 0.02, arucoMarkerType = cv2.aruco.DICT_4X4_50):
+    def __init__(self, arucoMarkerSize = 0.02, arucoMarkerType = cv2.aruco.DICT_4X4_50):
         self.arucoMarkerSize = arucoMarkerSize
         self.arucoMarkerType = arucoMarkerType
         self.intrinsicCamera = np.array(((933.15867, 0, 657.59),(0,933.1586, 400.36993),(0,0,1)))
         self.distortion = np.array((-0.43948,0.18514,0,0))
-        self.camUrl = camUrl
+        # self.camUrl = camUrl
         # self.intrinsicCamera = np.array(((916.43246, 0, 318.554126),(0, 911.78896, 249.648667),(0,0,1)))
         # self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
         self.origin = None
 
-        # self.cap =  cv2.VideoCapture(5)
+        self.cap =  cv2.VideoCapture(4)
 
     
     def setOrigin(self,arucoId):
 
 
-        image = requests.get(self.camUrl)
-        imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-        image = cv2.imdecode(imgageArray, -1)
-        # ret, image = self.cap.read()
+        # image = requests.get(self.camUrl)
+        # imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
+        # image = cv2.imdecode(imgageArray, -1)
+        ret, image = self.cap.read()
         estimatedPose = self.__estimatePose(image, arucoId)
 
 
@@ -40,10 +39,10 @@ class arucoDetection:
 
     def getPose(self, arucoId):
 
-        # ret, image = self.cap.read()
-        image = requests.get(self.camUrl)
-        imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-        image = cv2.imdecode(imgageArray, -1)
+        ret, image = self.cap.read()
+        # image = requests.get(self.camUrl)
+        # imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
+        # image = cv2.imdecode(imgageArray, -1)
         estimatedPose = self.__estimatePose(image, arucoId)
 
 
@@ -97,14 +96,14 @@ class arucoDetection:
         invRvec, _ = cv2.Rodrigues(R)
         return invRvec, invTvec
 
-    # def __del__(self):
-    #     self.cap.release()
+    def __del__(self):
+        self.cap.release()
 
 
-position = arucoDetection("http://10.196.4.192:8080/shot.jpg")
+position = arucoDetection()
 position.setOrigin(1)
 while(1):
-    print(position.getPose(1))
+    print(position.getPose(1)[0])
     time.sleep(1)
 
 
