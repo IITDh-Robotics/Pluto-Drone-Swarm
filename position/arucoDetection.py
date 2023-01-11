@@ -23,7 +23,7 @@ class arucoDetection:
         self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
         self.origin = None
         if(len(camUrl) == 0):
-            self.cap =  cv2.VideoCapture(3)
+            self.cap =  cv2.VideoCapture(2)
 
     
     def setOrigin(self,arucoId):
@@ -43,7 +43,7 @@ class arucoDetection:
             self.origin = estimatedPose
             return True
         
-        # print("No Aruco Marker detected with id : ",arucoId)
+        print("No Aruco Marker detected with id : ",arucoId)
         return False
 
 
@@ -68,7 +68,7 @@ class arucoDetection:
 
             return self.__relativePosition(estimatedPose)
 
-        # print("No Aruco Marker detected with id : ",arucoId)
+        print("No Aruco Marker detected with id : ",arucoId)
         return []
 
 
@@ -115,7 +115,7 @@ class arucoDetection:
             self.cap.release()
 
 
-position = arucoDetection("http://10.196.6.82:8080/shot.jpg")
+position = arucoDetection("")
 # time.sleep(5)
 position.setOrigin(0)
 while(1):
