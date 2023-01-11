@@ -33,7 +33,7 @@ def main():
 		# 		r += 1
 		# avgHeight = ceil(height/10)
 
-		print(alti_packet[5], alti_packet[5] - height_cal)
+		print('alti_Packet', alti_packet)
 		time.sleep(1)
     #pluto.disarm()
 	#print("Taking Off")
