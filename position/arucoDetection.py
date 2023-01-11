@@ -69,7 +69,7 @@ class arucoDetection:
             return self.__relativePosition(estimatedPose)
 
         print("No Aruco Marker detected with id : ",arucoId)
-        return -1
+        return []
 
 
 
