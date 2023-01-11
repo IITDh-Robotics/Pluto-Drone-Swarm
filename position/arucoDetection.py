@@ -23,7 +23,7 @@ class arucoDetection:
         self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
         self.origin = None
         if(len(camUrl) == 0):
-            self.cap =  cv2.VideoCapture(3)
+            self.cap =  cv2.VideoCapture(2)
 
     
     def setOrigin(self,arucoId):
@@ -87,7 +87,6 @@ class arucoDetection:
             for i in range(len(ids)):
                 if(ids[i] == arucoId):
                     rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i],self.arucoMarkerSize, self.intrinsicCamera,self.distortion)
-
                     return [rvec, tvec]                                                     
         return []
 
@@ -100,9 +99,9 @@ class arucoDetection:
 
         info = cv2.composeRT(rvec1, tvec1, invRvec, invTvec)
         composedRvec, composedTvec = info[0], info[1]
-        composedRvec = composedRvec.reshape((3, 1))
-        composedTvec = composedTvec.reshape((3, 1))
-        return [composedRvec, composedTvec]
+        composedRvec = composedRvec.reshape((1, 3))
+        composedTvec = composedTvec.reshape((1, 3))
+        return [composedRvec[0], composedTvec[0]]
     
     def inversePerspective(self,rvec, tvec):
         R, _ = cv2.Rodrigues(rvec)
@@ -116,9 +115,13 @@ class arucoDetection:
             self.cap.release()
 
 
-position = arucoDetection()
+position = arucoDetection("")
 # time.sleep(5)
 position.setOrigin(0)
 while(1):
-    print(position.getPose(1))
-    time.sleep(1)
+
+    output = position.getPose(0)
+    if(len(output)):
+        ori, (x,y,z) = output
+        print(z)
+
