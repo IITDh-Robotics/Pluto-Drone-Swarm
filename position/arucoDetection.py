@@ -1,7 +1,6 @@
 import requests
 import cv2
 import numpy as np
-import imutils
 import time
 
 
@@ -36,6 +35,7 @@ class arucoDetection:
         else:
             ret, image = self.cap.read()
 
+
         estimatedPose = self.__estimatePose(image, arucoId)
 
 
@@ -49,12 +49,14 @@ class arucoDetection:
 
     def getPose(self, arucoId):
 
+
         if(len(self.camUrl)):
             image = requests.get(self.camUrl)
             imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
             image = cv2.imdecode(imgageArray, -1)
         else:
             ret, image = self.cap.read()
+
 
         estimatedPose = self.__estimatePose(image, arucoId)
 
@@ -118,5 +120,5 @@ position = arucoDetection()
 # time.sleep(5)
 position.setOrigin(0)
 while(1):
-    print(position.getPose(0))
+    print(position.getPose(1))
     time.sleep(1)
