@@ -1,4 +1,4 @@
-
+import requests
 import cv2
 import numpy as np
 import time
@@ -6,26 +6,36 @@ import time
 
 class arucoDetection:
 
-    def __init__(self, arucoMarkerSize = 0.02, arucoMarkerType = cv2.aruco.DICT_4X4_50):
+    def __init__(self, camUrl = "", arucoMarkerSize = 0.02, arucoMarkerType = cv2.aruco.DICT_4X4_50):
         self.arucoMarkerSize = arucoMarkerSize
         self.arucoMarkerType = arucoMarkerType
-        self.intrinsicCamera = np.array(((933.15867, 0, 657.59),(0,933.1586, 400.36993),(0,0,1)))
-        self.distortion = np.array((-0.43948,0.18514,0,0))
-        # self.camUrl = camUrl
-        # self.intrinsicCamera = np.array(((916.43246, 0, 318.554126),(0, 911.78896, 249.648667),(0,0,1)))
-        # self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
-        self.origin = None
+        # self.intrinsicCamera = np.array(((933.15867, 0, 657.59),(0,933.1586, 400.36993),(0,0,1)))
+        # self.distortion = np.array((-0.43948,0.18514,0,0))
+        self.camUrl = camUrl
 
-        self.cap =  cv2.VideoCapture(4)
+
+        #paramters for mobile cam ------not working well :(
+        # self.intrinsicCamera = np.array((( 2.9779541947587072e+03, 0., 2.0643284645488870e+03),( 0,2.8273594454649269e+03, 9.2793490978151192e+02),(0,0,1)))
+        # self.distortion = np.array((1.6754717875327499e-01, -9.7578371736529701e-01,3.3799089890509605e-03, 5.7466626463058600e-03,2.0988545372834846e+00))
+
+        #parameters for webcam
+        self.intrinsicCamera = np.array(((916.43246, 0, 318.554126),(0, 911.78896, 249.648667),(0,0,1)))
+        self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
+        self.origin = None
+        if(len(camUrl) == 0):
+            self.cap =  cv2.VideoCapture(3)
 
     
     def setOrigin(self,arucoId):
 
+        if(len(self.camUrl)):
+            image = requests.get(self.camUrl)
+            imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
+            image = cv2.imdecode(imgageArray, -1)
+        else:
+            ret, image = self.cap.read()
 
-        # image = requests.get(self.camUrl)
-        # imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-        # image = cv2.imdecode(imgageArray, -1)
-        ret, image = self.cap.read()
+
         estimatedPose = self.__estimatePose(image, arucoId)
 
 
@@ -39,10 +49,15 @@ class arucoDetection:
 
     def getPose(self, arucoId):
 
-        ret, image = self.cap.read()
-        # image = requests.get(self.camUrl)
-        # imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-        # image = cv2.imdecode(imgageArray, -1)
+
+        if(len(self.camUrl)):
+            image = requests.get(self.camUrl)
+            imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
+            image = cv2.imdecode(imgageArray, -1)
+        else:
+            ret, image = self.cap.read()
+
+
         estimatedPose = self.__estimatePose(image, arucoId)
 
 
@@ -54,7 +69,7 @@ class arucoDetection:
             return self.__relativePosition(estimatedPose)
 
         print("No Aruco Marker detected with id : ",arucoId)
-        return -1
+        return []
 
 
 
@@ -73,7 +88,7 @@ class arucoDetection:
                 if(ids[i] == arucoId):
                     rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i],self.arucoMarkerSize, self.intrinsicCamera,self.distortion)
 
-                    return [tvec, rvec]                                                     
+                    return [rvec, tvec]                                                     
         return []
 
     
@@ -97,14 +112,13 @@ class arucoDetection:
         return invRvec, invTvec
 
     def __del__(self):
-        self.cap.release()
+        if(len(self.camUrl) == 0):
+            self.cap.release()
 
 
 position = arucoDetection()
-position.setOrigin(1)
+# time.sleep(5)
+position.setOrigin(0)
 while(1):
-    print(position.getPose(1)[0])
+    print(position.getPose(1))
     time.sleep(1)
-
-
-
