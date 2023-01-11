@@ -10,28 +10,25 @@ class Pluto:
 
 	def arm(self):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, L, L, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
-		print('about to send arm:')
 		self.conn.send(packet)
-		print('sent arm:', packet)
 
-	def takeoff(self):
-		packet = createPacket(MSG_IN, MSP_SET_COMMAND, [TAKE_OFF])
-		print(MSP_SET_COMMAND)
+	def disarm(self):
+		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, L, H, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, DISARM])
 		self.conn.send(packet)
 
 	def rc(self, roll, pitch, throttle, yaw):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
+		self.conn.send(packet)
+
+	def takeoff(self):
+		packet = createPacket(MSG_IN, MSP_SET_COMMAND, [TAKE_OFF])
+		self.conn.send(packet)
 
 	def land(self):
 		packet = createPacket(MSG_IN, MSP_SET_COMMAND, [LAND])
 		self.conn.send(packet)
 
-	def disarm(self):
-		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, H, L, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, DISARM])
-		self.conn.send(packet)
-		print('sent disarm:', packet)
-
-	def get_alti(self):
+	def getAltitude(self):
 		packet = createPacket(MSG_IN, MSP_ALTITUDE)
 		self.conn.send(packet)
 		

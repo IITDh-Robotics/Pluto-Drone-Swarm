@@ -8,7 +8,7 @@ def height_calib():
 	heights = 0
 	time.sleep(20)
 	while r < 10:
-		alti_packet = pluto.get_alti()
+		alti_packet = pluto.getAltitude()
 		if len(alti_packet) > 5:
 			height = alti_packet[5]  #5th byte appears to be changing like height
 			heights += height
@@ -19,32 +19,28 @@ def height_calib():
 
 def main():
 	
-	height_cal = height_calib()
-	print(height_cal)
-	while True:
-		alti_packet = pluto.get_alti()
-		# r = 0
-		# heights = 0
-		# while r < 10:
+	# height_cal = height_calib()
+	# print(height_cal)
+	# while True:
+	# 	alti_packet = pluto.getAltitude()
+	# 	# r = 0
+	# 	# heights = 0
+	# 	# while r < 10:
 			
-		# 	if len(alti_packet) > 5:
-		# 		height = alti_packet[5]  #5th byte appears to be changing like height
-		# 		heights += height
-		# 		r += 1
-		# avgHeight = ceil(height/10)
+	# 	# 	if len(alti_packet) > 5:
+	# 	# 		height = alti_packet[5]  #5th byte appears to be changing like height
+	# 	# 		heights += height
+	# 	# 		r += 1
+	# 	# avgHeight = ceil(height/10)
 
-		print('alti_Packet', alti_packet)
-		time.sleep(1)
-    #pluto.disarm()
-	#print("Taking Off")
-	#pluto.takeoff()
-	#time.sleep(2)
-	#print("Increasing Throttle")
-	#pluto.rc(1500, 1500, 2000, 1500)
-	#time.sleep(2)
-	#print("Landing")
-	#pluto.land()
-    
+	# 	print(alti_packet[5], alti_packet[5] - height_cal)
+	# 	time.sleep(1)
+
+	pluto = Pluto()
+
+	while True:
+		pluto.getAltitude()
+		time.sleep(5)    
 
 if __name__ == '__main__':
 	main()
