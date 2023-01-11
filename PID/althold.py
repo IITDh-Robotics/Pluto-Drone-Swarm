@@ -4,21 +4,21 @@ import control
 from time import time
 
 class AltitudeHold:
-    def __init__(self, dist, estimator=arucoDetection()):
-        
+    def __init__(self, dist, id=0, estimator=arucoDetection()):
+        self.id = id
         self.position = estimator
-        while not self.position.setOrigin(1):
+        while not self.position.setOrigin(self.id):
             print("Setting origin")
             pass
+        print("Origin Set!")
         self.drone = control.Pluto()
         self.distance = dist
         
         
     def setupPID(self, Kp=0.1, Ki=0.5, Kd=0.01, sample_time=0.01):
-                
-
         self.pid = PID(Kp, Ki, Kd, setpoint=self.distance)
         self.pid.sample_time = sample_time
+        print("PID setup done")
         
 
     
@@ -29,7 +29,7 @@ class AltitudeHold:
         start = time()
         
         while time() < start + duration:
-            pos = self.position.getPose(1)
+            pos = self.position.getPose(self.id)
             if len(pos)==0:
                 break
             ori, (x, y, z) = pos
