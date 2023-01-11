@@ -36,4 +36,10 @@ class Pluto:
 		self.conn.send(packet)
 		
 		print('sent alti req:', packet)
-		print(self.conn.receive())
+		to_be_returned = []
+
+		for byte in bytearray(self.conn.receive()):
+			to_be_returned.append(byte)
+		
+
+		return to_be_returned

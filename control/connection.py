@@ -16,7 +16,7 @@ class Connection:
 		
 	def send(self, data):
 		self.tn.write(data)
-		print('sending from send():', data)
+		#print('sending from send():', data)
 		#self.tn.read_eager()
 
 	def disconnect(self):
