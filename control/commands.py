@@ -1,6 +1,6 @@
-from connection import Connection
-from packets import createPacket
-from consts import *
+from control.connection import Connection
+from control.packets import createPacket
+from control.consts import *
 from time import sleep
 
 class Pluto:

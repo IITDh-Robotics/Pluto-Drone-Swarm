@@ -1,7 +1,7 @@
 from simple_pid import PID
 from position.arucoDetection import arucoDetection
-import control
-from time import time
+from control.commands import Pluto
+from time import time, sleep
 
 class AltitudeHold:
     def __init__(self, dist, id=0, estimator=arucoDetection()):
@@ -11,13 +11,14 @@ class AltitudeHold:
             print("Setting origin")
             pass
         print("Origin Set!")
-        self.drone = control.Pluto()
+        self.drone = Pluto()
         self.distance = dist
         
         
-    def setupPID(self, Kp=0.1, Ki=0.5, Kd=0.01, sample_time=0.01):
+    def setupPID(self, Kp=-10000, Ki=0.5, Kd=0.01, sample_time=0.01):
         self.pid = PID(Kp, Ki, Kd, setpoint=self.distance)
         self.pid.sample_time = sample_time
+        self.pid.output_limits = (0,1000)
         print("PID setup done")
         
 
@@ -25,19 +26,32 @@ class AltitudeHold:
     def althold(self, duration):
         
         self.drone.arm()
+
+        # sleep(10)
         
         start = time()
+
+        count = 0
         
         while time() < start + duration:
             pos = self.position.getPose(self.id)
             if len(pos)==0:
-                break
-            ori, (x, y, z) = pos
-            output = self.pid(z)
+                count += 1
+            else:
+                print("------------Marker detected------------")
+                count = 0
+                ori, (x, y, z) = pos
+                print("z = ", z)
+                output = int(self.pid(z))
+                print("PID output: ", output)
+                self.drone.rc(1500, 1500, 1000 + output, 1500)\
             
-            self.drone.rc(1500, 1500, 1000 + output, 1500)
+            if count == 40:
+                print("Count == ", count)
+                break
         
         self.drone.disarm()
+        print("Drone disarmed")
             
             
  
