@@ -1,12 +1,12 @@
-from PID.althold import AltitudeHold
+from PID.poshold import PosHold
+from position.optitrack import Optitrack
 
 
 def main():
-	altHold = AltitudeHold(0)
+	estimator = Optitrack(hostname="192.168.4.2")
+	posHold = PosHold(estimator)
 
-	altHold.setupPID()
-
-	altHold.althold(30)
+	posHold.run(10)
 
 if __name__ == "__main__":
 	main()

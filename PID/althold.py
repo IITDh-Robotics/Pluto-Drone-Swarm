@@ -15,7 +15,7 @@ class AltitudeHold:
         self.distance = dist
         
         
-    def setupPID(self, Kp=-10000, Ki=0.5, Kd=0.01, sample_time=0.01):
+    def setupPID(self, Kp=-2000, Ki=0.5, Kd=0.01, sample_time=0.01):
         self.pid = PID(Kp, Ki, Kd, setpoint=self.distance)
         self.pid.sample_time = sample_time
         self.pid.output_limits = (0,1000)
@@ -27,7 +27,7 @@ class AltitudeHold:
         
         self.drone.arm()
 
-        # sleep(10)
+        sleep(2)
         
         start = time()
 
@@ -44,11 +44,13 @@ class AltitudeHold:
                 print("z = ", z)
                 output = int(self.pid(z))
                 print("PID output: ", output)
-                self.drone.rc(1500, 1500, 1000 + output, 1500)\
+                self.drone.rc(1500+10, 1500+20, 1000 + output, 1500)\
             
             if count == 40:
                 print("Count == ", count)
                 break
+
+            sleep(0.1)
         
         self.drone.disarm()
         print("Drone disarmed")

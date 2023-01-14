@@ -18,6 +18,7 @@ class Pluto:
 
 	def rc(self, roll, pitch, throttle, yaw):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
+		print(f"Sending roll:{roll}, pitch:{pitch}, throttle:{throttle}, yaw:{yaw}")
 		self.conn.send(packet)
 
 	def takeoff(self):

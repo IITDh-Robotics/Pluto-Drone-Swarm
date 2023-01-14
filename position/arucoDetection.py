@@ -23,7 +23,7 @@ class arucoDetection:
         self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
         self.origin = None
         if(len(camUrl) == 0):
-            self.cap =  cv2.VideoCapture(2)
+            self.cap =  cv2.VideoCapture(4)
 
     
     def setOrigin(self,arucoId):
