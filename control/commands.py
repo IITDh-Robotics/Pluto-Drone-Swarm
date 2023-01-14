@@ -4,8 +4,8 @@ from control.consts import *
 from time import sleep
 
 class Pluto:
-	def __init__(self):
-		self.conn = Connection()
+	def __init__(self, host="192.168.4.1", port=23):
+		self.conn = Connection(host, port)
 		self.conn.connect()
 
 	def arm(self):
