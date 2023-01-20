@@ -1,7 +1,6 @@
 from control.connection import Connection
 from control.packets import createPacket
 from control.consts import *
-from time import sleep
 
 class Pluto:
 	def __init__(self, host="192.168.4.1", port=23):
@@ -31,12 +30,13 @@ class Pluto:
 	def getAltitude(self):
 		packet = createPacket(MSG_IN, MSP_ALTITUDE)
 		self.conn.send(packet)
-		
-		print('sent alti req:', packet)
-		to_be_returned = []
+		data = self.conn.receive()
+		# Returns Altitude, Vario
+		return int.from_bytes(data[0:4], "little"), int.from_bytes(data[4:6], "little")
 
-		for byte in bytearray(self.conn.receive()):
-			to_be_returned.append(byte)
-		
-
-		return to_be_returned
+	def getAnalog(self):
+		packet = createPacket(MSG_IN, MSP_ANALOG)
+		self.conn.send(packet)
+		data = self.conn.receive()
+		# Returns Battery Voltage, mAH Drawn, Amperage
+		return int.from_bytes(data[0:2], "little"), int.from_bytes(data[2:6], "little"), int.from_bytes(data[6:10], "little")

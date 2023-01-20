@@ -8,7 +8,7 @@ class Connection:
 		self.port = port
 
 	def connect(self):
-		print("Connecting to pluto at " + self.host + ":" + self.port + "...")
+		print(f"Connecting to pluto at {self.host}:{self.port}...")
 		try:
 			self.s = socket()
 			self.s.connect((self.host, self.port))
@@ -22,15 +22,37 @@ class Connection:
 	def disconnect(self):
 		self.s.shutdown(self.SHUT_RDWR)
 		self.s.close()
-		print("Disconnected from pluto at " + self.host + ":" + self.port + ".")
+		print(f"Disconnected from pluto at {self.host}:{self.port}...")
 
 	def receive(self):
-		res = self.s.recv(50)
-		res = bytearray(res)
-		if DBG_CONN:
-			packLen = int.from_bytes(res[3:4], byteorder="little")
-			arrLen = len(res)
-			for i in range(5, 5+packLen):
+		def calculateChecksum(packet):
+			checksum = 0
+			for byte in bytearray(packet)[3:]:
+				checksum ^= byte
+			return checksum
+
+		res = bytearray(self.s.recv(50))
+
+		# Check if response is valid
+		err = None
+		if res[0:3] != bytearray(b"$M>") or res[3]+6 != len(res) or res[-1] != calculateChecksum(res[:-1]):
+			if res[0:3] != bytearray(b"$M>"):
+				err = "Message header is invalid!"
+			elif res[3]+6 != len(res):
+				err = "Message length is invalid!"
+			elif res[-1] != calculateChecksum(res[:-1]):
+				err = f"Message checksum is invalid!\nReceived: {res[-1]} Expected: {calculateChecksum(res[:-1])}"
+			data = []
+		else:
+			# Extract data from response
+			data = res[5:-1]
+
+		if DBG_REC:
+			if err:
+				print(err)
+			print("Payload: ")
+			for i in range(5, len(res)-1):
 				print(f"{hex(res[i])}", end=" ")
 			print()
-		return res
+
+		return data

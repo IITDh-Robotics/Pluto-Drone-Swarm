@@ -1,12 +1,21 @@
+from time import sleep
 from PID.althold import AltitudeHold
+from control.commands import Pluto
 
 
 def main():
-	altHold = AltitudeHold(0)
+	pluto = Pluto("10.250.60.87")
 
-	altHold.setupPID()
+	# while True:
+	# 	alt, _, _ = pluto.getAnalog()
+	# 	print(alt)
+	# 	sleep(1)
 
-	altHold.althold(30)
+	pluto.arm()
+	sleep(1)
+	pluto.rc(1500, 1500, 1500, 1500)
+	sleep(2)
+	pluto.disarm()
 
 if __name__ == "__main__":
 	main()
