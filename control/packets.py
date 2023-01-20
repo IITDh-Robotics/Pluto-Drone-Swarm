@@ -1,15 +1,15 @@
 from telnetlib import Telnet
 from control.consts import *
 
-def calculateChecksum(data):
+def calculateChecksum(packet):
 	checksum = 0
-	for byte in bytearray(data)[3:]:
+	for byte in bytearray(packet)[3:]:
 		checksum ^= byte
 	return int.to_bytes(checksum, 1, 'little')
 
 def createPacket(dir, cmd, data = []):
 	header = b"$M" 										# Msg Header = $M
-	header += bytes(dir, 'ascii')						# Msg Direction = < or >
+	header += dir										# Msg Direction = < or >
 	header += int.to_bytes(len(data)*2, 1, 'little')	# Msg Length = 2 * Data Length
 	# print(cmd)
 	header += int.to_bytes(cmd, 1, 'little')			# Msg Command
