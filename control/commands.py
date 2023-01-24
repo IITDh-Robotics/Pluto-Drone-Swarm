@@ -1,11 +1,16 @@
 from control.connection import Connection
 from control.packets import createPacket
 from control.consts import *
+from time import sleep
 
 class Pluto:
 	def __init__(self, host="192.168.4.1", port=23):
 		self.conn = Connection(host, port)
 		self.conn.connect()
+
+	def __del__(self):
+		self.disarm()
+		sleep(1)
 
 	def arm(self):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, L, L, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
