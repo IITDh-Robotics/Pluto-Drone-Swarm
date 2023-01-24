@@ -16,18 +16,17 @@ class PosHold:
 		self.pos = pos
 
 		# Setup PID controllers
-		kp, ki, kd = 150, 10, 5
+		kp, ki, kd = 105, 3, 5		# 80, 5, 0.1
 		self.pidx = PID(kp, ki, kd, setpoint=self.pos[0])
 		self.pidy = PID(kp, ki, kd, setpoint=self.pos[1])
-		self.pidz = PID(100, 50, 10, setpoint=self.pos[2])
+		self.pidz = PID(180, 20, 45, setpoint=self.pos[2])
 
 		# Set PID controller output limits
 		self.pidx.output_limits = (-500, 500)
 		self.pidy.output_limits = (-500, 500)
-		self.pidz.output_limits = (-500, 500)
+		self.pidz.output_limits = (-700, 300)
 
 	def run(self, duration=10):
-		# sleep(5)
 
 		self.drone.arm()
 		sleep(1)
@@ -37,7 +36,7 @@ class PosHold:
 			ori, (x, y, z) = self.estimator.getPose()
 
 			print((x, y, z))
-			if z > 2:
+			if z > 3:
 				break
 			if math.isnan(x):
 				continue
@@ -48,9 +47,6 @@ class PosHold:
 			throttle = self.pidz(z)
 
 			# Send commands to drone
-			self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1500 + int(throttle), 1500)
-
-			# voltage, _, _ = self.drone.getAnalog()
-			# print(voltage)
+			self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1700 + int(throttle), 1500)
 
 		self.drone.disarm()
