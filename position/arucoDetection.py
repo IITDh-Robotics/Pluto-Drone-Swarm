@@ -23,7 +23,7 @@ class arucoDetection:
         self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
         self.origin = None
         if(len(camUrl) == 0):
-            self.cap =  cv2.VideoCapture(4)
+            self.cap =  cv2.VideoCapture(2)
 
     
     def setOrigin(self,arucoId):
@@ -46,6 +46,9 @@ class arucoDetection:
         print("No Aruco Marker detected with id : ",arucoId)
         return False
 
+    # Changing coordinate system from camera to drone
+    def _changeCoordinate(self, ori,x,y,z):
+        return [ori,[-x,-y,-z]]
 
     def getPose(self, arucoId):
 
@@ -65,8 +68,8 @@ class arucoDetection:
         # return estimatedPose
         
         if(len(estimatedPose) and self.origin != None):
-
-            return self.__relativePosition(estimatedPose)
+            ori, (x,y,z) = self.__relativePosition(estimatedPose)
+            return self._changeCoordinate(ori,x,y,z)
 
         print("No Aruco Marker detected with id : ",arucoId)
         return []
@@ -110,18 +113,20 @@ class arucoDetection:
         invRvec, _ = cv2.Rodrigues(R)
         return invRvec, invTvec
 
+
+
     def __del__(self):
         if(len(self.camUrl) == 0):
             self.cap.release()
 
 
-# position = arucoDetection("")
-# # time.sleep(5)
-# position.setOrigin(0)
-# while(1):
+position = arucoDetection("")
+# time.sleep(5)
+position.setOrigin(1)
+while(1):
 
-#     output = position.getPose(0)
-#     if(len(output)):
-#         ori, (x,y,z) = output
-#         print(z)
+    output = position.getPose(1)
+    if(len(output)):
+        ori, (x,y,z) = output
+        print(x,y,z,sep=",")
 
