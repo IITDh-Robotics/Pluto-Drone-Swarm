@@ -120,13 +120,13 @@ class arucoDetection:
             self.cap.release()
 
 
-position = arucoDetection("")
-# time.sleep(5)
-position.setOrigin(1)
-while(1):
+# position = arucoDetection("")
+# # time.sleep(5)
+# position.setOrigin(1)
+# while(1):
 
-    output = position.getPose(1)
-    if(len(output)):
-        ori, (x,y,z) = output
-        print(x,y,z,sep=",")
+#     output = position.getPose(1)
+#     if(len(output)):
+#         ori, (x,y,z) = output
+#         print(x,y,z,sep=",")
 
