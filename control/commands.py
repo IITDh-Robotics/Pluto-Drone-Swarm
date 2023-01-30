@@ -10,15 +10,16 @@ class Pluto:
 
 	def __del__(self):
 		self.disarm()
-		sleep(1)
 
 	def arm(self):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, L, L, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
 		self.conn.send(packet)
+		sleep(1)
 
 	def disarm(self):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [C, C, L, H, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, DISARM])
 		self.conn.send(packet)
+		sleep(1)
 
 	def rc(self, roll, pitch, throttle, yaw):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
