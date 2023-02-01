@@ -19,7 +19,7 @@ class PosHold:
 		kp, ki, kd = 105, 3, 5		# 80, 5, 0.1
 		self.pidx = PID(kp, ki, kd, setpoint=self.pos[0])
 		self.pidy = PID(kp, ki, kd, setpoint=self.pos[1])
-		self.pidz = PID(180, 20, 45, setpoint=self.pos[2])
+		self.pidz = PID(180, 20, 55, setpoint=self.pos[2])
 
 		# Set PID controller output limits
 		self.pidx.output_limits = (-500, 500)
