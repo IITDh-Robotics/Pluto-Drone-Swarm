@@ -23,7 +23,7 @@ class Pluto:
 
 	def rc(self, roll, pitch, throttle, yaw):
 		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
-		print(f"Sending roll:{roll}, pitch:{pitch}, throttle:{throttle}, yaw:{yaw}")
+		# print(f"Sending roll:{roll}, pitch:{pitch}, throttle:{throttle}, yaw:{yaw}")
 		self.conn.send(packet)
 
 	def takeoff(self):
@@ -45,5 +45,7 @@ class Pluto:
 		packet = createPacket(MSG_IN, MSP_ANALOG)
 		self.conn.send(packet)
 		data = self.conn.receive()
-		# Returns Battery Voltage, mAH Drawn, Amperage
-		return int.from_bytes(data[0:2], "little"), int.from_bytes(data[2:6], "little"), int.from_bytes(data[6:10], "little")
+		sleep(0.5)
+		# Returns Battery Voltage, mAH Drawn, RSSI, Amperage
+		# return 0.1*int.from_bytes(data[0:1], "little"), int.from_bytes(data[2:4], "little"), 0.01*int.from_bytes(data[4:6], "little"), int.from_bytes(data[6:8], "little")
+		return 0.1*int.from_bytes(data[0:1], "little")

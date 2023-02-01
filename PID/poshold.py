@@ -26,10 +26,36 @@ class PosHold:
 		self.pidy.output_limits = (-500, 500)
 		self.pidz.output_limits = (-700, 300)
 
+	def hold(self, pos=[0,0,1], duration=10):
+		self.pos = pos
+
+		# Update setpoints
+		self.pidx.setpoint = self.pos[0]
+		self.pidy.setpoint = self.pos[1]
+		self.pidz.setpoint = self.pos[2]
+
+		start = time()
+		while time() < start + duration:
+			ori, (x, y, z) = self.estimator.getPose()
+
+			# Error handling
+			if z > 3:
+				break
+			if math.isnan(x) or math.isnan(y) or math.isnan(z):
+				continue
+
+
+			# PID controller
+			roll = self.pidx(x)
+			pitch = self.pidy(y)
+			throttle = self.pidz(z)
+
+			# Send commands to drone
+			self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1700 + int(throttle), 1500)
+
 	def run(self, duration=10):
 
 		self.drone.arm()
-		sleep(1)
 
 		start = time()
 		while time() < start + duration:
