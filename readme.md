@@ -1,0 +1,1 @@
+Documentation of the project can be found [here](docs/_build/html/index.html).

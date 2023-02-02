@@ -28,6 +28,14 @@ control.packets module
    :undoc-members:
    :show-inheritance:
 
+control.poshold module
+----------------------
+
+.. automodule:: control.poshold
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

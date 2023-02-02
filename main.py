@@ -1,5 +1,5 @@
 from time import sleep, time
-from PID.poshold import PosHold
+from control.poshold import PosHold
 from position.optitrack import Optitrack
 
 

@@ -41,7 +41,6 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PID package" href="PID.html" />
     <link rel="prev" title="InterIIT Repo" href="modules.html" /> 
 </head>
 
@@ -105,10 +104,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#control.packets.createPacket"><code class="docutils literal notranslate"><span class="pre">createPacket()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#module-control.poshold">control.poshold module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#control.poshold.PosHold"><code class="docutils literal notranslate"><span class="pre">PosHold</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-control">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="PID.html">PID package</a></li>
 </ul>
 </li>
 </ul>
@@ -297,6 +299,38 @@
 </dd></dl>
 
 </section>
+<section id="module-control.poshold">
+<span id="control-poshold-module"></span><h2>control.poshold module<a class="headerlink" href="#module-control.poshold" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="control.poshold.PosHold">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">control.poshold.</span></span><span class="sig-name descname"><span class="pre">PosHold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'192.168.4.1'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#control.poshold.PosHold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An instance of this class can be used to hold the drone at the specified position (passed as a parameter). PID control is used which is implemented using the simple_pid package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>estimator</strong> – An instance of the posision estimator class.</p></li>
+<li><p><strong>pos</strong> – Position to be held.</p></li>
+<li><p><strong>host</strong> – IP Address of the drone.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="control.poshold.PosHold.hold">
+<span class="sig-name descname"><span class="pre">hold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#control.poshold.PosHold.hold" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> – The 3D coordinates at which the drone must be held.</p></li>
+<li><p><strong>duration</strong> – The duration in seconds for which the position must be held.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-control">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-control" title="Permalink to this heading">¶</a></h2>
 </section>
@@ -308,7 +342,6 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="PID.html" class="btn btn-neutral float-right" title="PID package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="modules.html" class="btn btn-neutral float-left" title="InterIIT Repo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

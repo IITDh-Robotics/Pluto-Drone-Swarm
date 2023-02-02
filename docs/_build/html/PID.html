@@ -92,11 +92,8 @@
 <li class="toctree-l2"><a class="reference internal" href="control.html">control package</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">PID package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-PID.poshold">PID.poshold module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#PID.poshold.PosHold"><code class="docutils literal notranslate"><span class="pre">PosHold</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-PID">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pid-poshold-module">PID.poshold module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -175,40 +172,11 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
-<section id="module-PID.poshold">
-<span id="pid-poshold-module"></span><h2>PID.poshold module<a class="headerlink" href="#module-PID.poshold" title="Permalink to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="PID.poshold.PosHold">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">PID.poshold.</span></span><span class="sig-name descname"><span class="pre">PosHold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'192.168.4.1'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PID.poshold.PosHold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>An instance of this class can be used to hold the drone at the specified position (passed as a parameter). PID control is used which is implemented using the simple_pid package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>estimator</strong> – An instance of the posision estimator class.</p></li>
-<li><p><strong>pos</strong> – Position to be held.</p></li>
-<li><p><strong>host</strong> – IP Address of the drone.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="PID.poshold.PosHold.hold">
-<span class="sig-name descname"><span class="pre">hold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PID.poshold.PosHold.hold" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pos</strong> – The 3D coordinates at which the drone must be held.</p></li>
-<li><p><strong>duration</strong> – The duration in seconds for which the position must be held.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="pid-poshold-module">
+<h2>PID.poshold module<a class="headerlink" href="#pid-poshold-module" title="Permalink to this heading">¶</a></h2>
 </section>
-<section id="module-PID">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PID" title="Permalink to this heading">¶</a></h2>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">¶</a></h2>
 </section>
 </section>
 
