@@ -3,11 +3,19 @@ from control.consts import *
 
 
 class Connection:
+	"""
+	An instance of this class can be used to establish a connection with the pluto and send/receive data from it. This is a basic wrapper around the socket class.
+
+	Optionally the host and port of the drone can be specified.
+	"""
 	def __init__(self, host="192.168.4.1", port=23):
 		self.host = host
 		self.port = port
 
 	def connect(self):
+		"""
+		Establishes a connection with the pluto.
+		"""
 		print(f"Connecting to pluto at {self.host}:{self.port}...")
 		try:
 			self.s = socket()
@@ -15,16 +23,25 @@ class Connection:
 			print("Connection successful!")
 		except:
 			print("Connection failed!")
-		
-	def send(self, data):
-		self.s.send(data)
 
 	def disconnect(self):
+		"""
+		Disconnects from the pluto.
+		"""
 		self.s.shutdown(self.SHUT_RDWR)
 		self.s.close()
 		print(f"Disconnected from pluto at {self.host}:{self.port}...")
+		
+	def send(self, data):
+		"""
+		Sends data to the pluto.
+		"""
+		self.s.send(data)
 
 	def receive(self):
+		"""
+		Receives packets from the pluto. The packet is validated and the payload is returned.
+		"""
 		def calculateChecksum(packet):
 			checksum = 0
 			for byte in bytearray(packet)[3:]:

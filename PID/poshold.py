@@ -7,8 +7,14 @@ from plot import plot
 from control.commands import Pluto
 from simple_pid import PID
 
-
 class PosHold:
+	'''
+	An instance of this class can be used to hold the drone at the specified position (passed as a parameter). PID control is used which is implemented using the simple_pid package.
+
+	:param estimator: An instance of the posision estimator class. 
+	:param pos: Position to be held.
+	:param host: IP Address of the drone.
+	'''
 	def __init__(self, estimator, pos=[0,0,1], host="192.168.4.1"):
 		self.record = False
 		self.estimator = estimator
@@ -27,6 +33,7 @@ class PosHold:
 		self.pidx = PID(kp, ki, kd, setpoint=self.pos[0])
 		self.pidy = PID(kp, ki, kd, setpoint=self.pos[1])
 		self.pidz = PID(180, 20, 55, setpoint=self.pos[2])
+
 		if self.record:
 			self.hist["pid"] = {"kp": kp, "ki": ki, "kd": kd}
 
@@ -42,6 +49,10 @@ class PosHold:
 			json.dump(self.hist, open(f"tests/hist-{kp}-{ki}-{kd}_{idx}.json", "w"))
 
 	def hold(self, pos=[0,0,1], duration=10):
+		'''
+		:param pos: The 3D coordinates at which the drone must be held.
+		:param duration: The duration in seconds for which the position must be held.
+		'''
 		self.pos = pos
 		if self.record:
 			self.hist["setpoint"].append(self.pos)

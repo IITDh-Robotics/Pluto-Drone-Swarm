@@ -1,0 +1,7 @@
+disarm module
+=============
+
+.. automodule:: disarm
+   :members:
+   :undoc-members:
+   :show-inheritance:

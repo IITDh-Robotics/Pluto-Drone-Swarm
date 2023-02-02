@@ -1,0 +1,7 @@
+STAConnect module
+=================
+
+.. automodule:: STAConnect
+   :members:
+   :undoc-members:
+   :show-inheritance:
