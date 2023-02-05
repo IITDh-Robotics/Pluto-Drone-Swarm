@@ -71,9 +71,10 @@ class PosHold:
 			# Error handling
 			if z > 3:
 				break
-			if math.isnan(x) or math.isnan(y) or math.isnan(z):
-				break
 
+			if math.isnan(x) or math.isnan(y) or math.isnan(z):
+				self.drone.rc(1500, 1500, 1500, 1500, althold=True)
+				continue
 
 			# PID controller
 			roll = self.pidx(x)

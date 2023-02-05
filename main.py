@@ -15,8 +15,8 @@ def hover():
 	# posHold.hold([2,1,1], 5)
 	# posHold.hold([0,1,1], 5)
 	# posHold.hold([0,0,1], 5)
-	posHold.drone.land()
-	sleep(2)
+	# posHold.drone.land()
+	# sleep(2)
 	posHold.drone.disarm()
 
 

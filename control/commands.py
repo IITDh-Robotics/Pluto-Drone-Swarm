@@ -32,11 +32,12 @@ class Pluto:
 		self.conn.send(packet)
 		sleep(1)
 
-	def rc(self, roll, pitch, throttle, yaw):
+	def rc(self, roll, pitch, throttle, yaw, althold=False):
 		'''
 		This function sends the roll, pitch, throttle and yaw values to the drone as a RC message.
 		'''
-		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, ALT_HOLD_OFF, ARM])
+		althold_mode = ALT_HOLD_ON if althold else ALT_HOLD_OFF
+		packet = createPacket(MSG_IN, MSP_SET_RAW_RC, [roll, pitch, throttle, yaw, YAW_HEAD_FREE, DEV_MODE_OFF, althold_mode, ARM])
 		# print(f"Sending roll:{roll}, pitch:{pitch}, throttle:{throttle}, yaw:{yaw}")
 		self.conn.send(packet)
 

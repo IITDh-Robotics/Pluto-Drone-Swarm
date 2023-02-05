@@ -1,3 +1,4 @@
+from math import nan
 import requests
 import cv2
 import numpy as np
@@ -72,7 +73,7 @@ class arucoDetection:
             return self._changeCoordinate(ori,x,y,z)
 
         print("No Aruco Marker detected with id : ",arucoId)
-        return []
+        return nan, (nan, nan, nan)
 
 
 
