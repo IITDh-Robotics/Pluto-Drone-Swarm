@@ -22,7 +22,7 @@ class PosHold:
 			self.hist = {"pos": [], "control": [], "setpoint": []}
 
 		# Set origin
-		while not self.estimator.setOrigin():
+		while not self.estimator.setOrigin(1):
 			print("Setting origin")
 		print("Origin Set!")
 		self.drone = Pluto(host)
@@ -64,7 +64,7 @@ class PosHold:
 
 		start = time()
 		while time() < start + duration:
-			ori, (x, y, z) = self.estimator.getPose()
+			ori, (x, y, z) = self.estimator.getPose(1)
 			if self.record:
 				self.hist["pos"].append((float(x), float(y), float(z)))
 
