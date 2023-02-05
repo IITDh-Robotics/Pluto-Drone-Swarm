@@ -42,6 +42,12 @@ class PosHold:
 		self.pidy.output_limits = (-500, 500)
 		self.pidz.output_limits = (-700, 300)
 
+		# Set PID controller sample time
+		herz = 100
+		self.pidx.sample_time = 1/herz
+		self.pidy.sample_time = 1/herz
+		self.pidz.sample_time = 1/herz
+
 	def __del__(self):
 		if self.record:
 			kp, ki, kd = self.hist["pid"]["kp"], self.hist["pid"]["ki"], self.hist["pid"]["kd"]
