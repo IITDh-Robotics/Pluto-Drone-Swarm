@@ -90,6 +90,7 @@ class arucoDetection:
     
     def __estimatePose(self, image, arucoId):
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        _, grayImage = cv2.threshold(grayImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
         cv2.aruco_dict = cv2.aruco.Dictionary_get(self.arucoMarkerType)
         parameters = cv2.aruco.DetectorParameters_create()
 
