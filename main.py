@@ -5,8 +5,8 @@ from position.optitrack import Optitrack
 
 def detect():
 	estimator = arucoDetection()
-	# while not estimator.setOrigin(1):
-	# 	pass
+	while not estimator.setOrigin(1):
+		pass
 	while True:
 		start = time()
 		print(estimator.getPose(1))

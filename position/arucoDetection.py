@@ -29,7 +29,11 @@ class arucoDetection:
 
         self.origin = None
         if(len(camUrl) == 0):
-            self.cap =  cv2.VideoCapture(2)
+            self.cap =  cv2.VideoCapture(4, cv2.CAP_V4L2)
+            self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
+            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+            self.cap.set(cv2.CAP_PROP_FPS, 30)
 
     
     def setOrigin(self,arucoId):
@@ -40,7 +44,6 @@ class arucoDetection:
             image = cv2.imdecode(imgageArray, -1)
         else:
             ret, image = self.cap.read()
-
 
         estimatedPose = self.__estimatePose(image, arucoId)
 
