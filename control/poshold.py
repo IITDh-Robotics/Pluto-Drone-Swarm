@@ -43,7 +43,7 @@ class PosHold:
 		self.pidz.output_limits = (-700, 300)
 
 		# Set PID controller sample time
-		herz = 100
+		herz = 30
 		self.pidx.sample_time = 1/herz
 		self.pidy.sample_time = 1/herz
 		self.pidz.sample_time = 1/herz

@@ -20,8 +20,13 @@ class arucoDetection:
         # self.distortion = np.array((1.6754717875327499e-01, -9.7578371736529701e-01,3.3799089890509605e-03, 5.7466626463058600e-03,2.0988545372834846e+00))
 
         #parameters for webcam
-        self.intrinsicCamera = np.array(((916.43246, 0, 318.554126),(0, 911.78896, 249.648667),(0,0,1)))
-        self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
+        # self.intrinsicCamera = np.array(((916.43246, 0, 318.554126),(0, 911.78896, 249.648667),(0,0,1)))
+        # self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
+
+        # new webcam
+        self.intrinsicCamera = np.array(((525.28433,0, 299.33435),(0, 505.07813, 253.2249), (0,0,1)))
+        self.distortion = np.array((-0.312501, 0.074840, -0.007301, 0.002798, 0.000000))
+
         self.origin = None
         if(len(camUrl) == 0):
             self.cap =  cv2.VideoCapture(2)
@@ -49,7 +54,7 @@ class arucoDetection:
 
     # Changing coordinate system from camera to drone
     def _changeCoordinate(self, ori,x,y,z):
-        return [ori,[-x,-y,-z]]
+        return [ori,[-x*3.28084,-y*3.28084,-z*3.28084]]
 
     def getPose(self, arucoId):
 
@@ -60,6 +65,11 @@ class arucoDetection:
             image = cv2.imdecode(imgageArray, -1)
         else:
             ret, image = self.cap.read()
+        
+        # return -1
+
+        cv2.imshow("image",image)
+        cv2.waitKey(1)
 
 
         estimatedPose = self.__estimatePose(image, arucoId)
