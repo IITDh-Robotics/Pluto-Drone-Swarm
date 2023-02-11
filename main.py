@@ -18,7 +18,7 @@ def hover():
 	posHold = PosHold(estimator)
 
 	posHold.drone.arm()
-	posHold.hold([0,0,0.75], 10)
+	posHold.hold([[0,0,0.75]], 10)
 	# posHold.hold([1,0,0.75], 10)
 	# posHold.hold([2,1,1], 5)
 	# posHold.hold([0,1,1], 5)
