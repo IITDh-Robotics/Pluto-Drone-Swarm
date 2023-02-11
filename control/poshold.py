@@ -33,7 +33,7 @@ class PosHold:
 		self.pidx = PID(kp, ki, kd, setpoint=self.pos[0])
 		self.pidy = PID(kp, ki, kd, setpoint=self.pos[1])
 		# self.pidz = PID(180, 20, 55, setpoint=self.pos[2])
-		self.pidz = PID(500, 70, 55, setpoint=self.pos[2])
+		self.pidz = PID(500, 50, 55, setpoint=self.pos[2])
 
 		if self.record:
 			self.hist["pid"] = {"kp": kp, "ki": ki, "kd": kd}
@@ -45,7 +45,7 @@ class PosHold:
 		self.pidz.output_limits = (-500, 500)
 
 		# Set PID controller sample time
-		herz = 30
+		herz = 15
 		self.pidx.sample_time = 1/herz
 		self.pidy.sample_time = 1/herz
 		self.pidz.sample_time = 1/herz
@@ -85,8 +85,8 @@ class PosHold:
 				continue
 	
 			# if (abs(self.pos[2] - z) < 0.01):
-				# self.pidz.set_auto_mode(False)
-				# print("---------------------------OFF!---------------------------------")
+			# 	self.pidx.set_auto_mode(False, last_output=0)
+			# 	print("---------------------------OFF!---------------------------------")
 
 			# PID controller
 			roll = self.pidx(x)
