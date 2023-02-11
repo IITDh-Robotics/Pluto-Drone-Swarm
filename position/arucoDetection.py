@@ -51,8 +51,8 @@ class arucoDetection:
     
     def setOrigin(self,arucoId):
 
-        estimatedPose = self.poses[arucoId]
-        if len(estimatedPose):
+        if(arucoId in self.poses.keys()):
+            estimatedPose = self.poses[arucoId]
             self.origin[arucoId] = estimatedPose
             return True
         
@@ -80,6 +80,7 @@ class arucoDetection:
         
 
     def getImage(self):
+        self.poses = {}
         if(len(self.camUrl)):
             image = requests.get(self.camUrl)
             imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
@@ -100,8 +101,8 @@ class arucoDetection:
 
     def getPose(self, arucoId):
 
-        estimatedPose = self.poses[arucoId]
-        if len(estimatedPose):
+        if(arucoId in self.poses.keys()):
+            estimatedPose = self.poses[arucoId]
             ori, (x,y,z) = self.__relativePosition(estimatedPose, arucoId)
             return self._changeCoordinate(ori,x,y,z)
 
