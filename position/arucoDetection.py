@@ -24,8 +24,12 @@ class arucoDetection:
         # self.distortion = np.array((-0.069533, 0.979625, 0.005022, 0.008359999999999999, 0))
 
         # new webcam
-        self.intrinsicCamera = np.array(((525.28433,0, 299.33435),(0, 505.07813, 253.2249), (0,0,1)))
-        self.distortion = np.array((-0.312501, 0.074840, -0.007301, 0.002798, 0.000000))
+        # self.intrinsicCamera = np.array(((525.28433,0, 299.33435), (0, 505.07813, 253.2249), (0,0,1)))
+        # self.distortion = np.array((-0.312501, 0.074840, -0.007301, 0.002798, 0.000000))
+
+        # new webcam 2.0
+        self.intrinsicCamera = np.array(((609.83274, 0., 268.45318), (0., 583.1485, 202.54002), (0., 0., 1.)))
+        self.distortion = np.array((-0.417462, 0.177596, 0.021865, 0.019743, 0.000000))
 
         self.origin = None
         if(len(camUrl) == 0):
@@ -33,6 +37,9 @@ class arucoDetection:
             self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+            # self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y', 'U', 'Y', 'V'))
+            # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
             self.cap.set(cv2.CAP_PROP_FPS, 30)
 
     
@@ -57,7 +64,9 @@ class arucoDetection:
 
     # Changing coordinate system from camera to drone
     def _changeCoordinate(self, ori,x,y,z):
+        print((-x*3.28084,-y*3.28084,-z*3.28084))
         return [ori,[-x*3.28084,-y*3.28084,-z*3.28084]]
+        # return [ori,[-x, -y, -z*2]]
 
     def getPose(self, arucoId):
 
@@ -70,9 +79,6 @@ class arucoDetection:
             ret, image = self.cap.read()
         
         # return -1
-
-        cv2.imshow("image",image)
-        cv2.waitKey(1)
 
 
         estimatedPose = self.__estimatePose(image, arucoId)
@@ -93,7 +99,11 @@ class arucoDetection:
     
     def __estimatePose(self, image, arucoId):
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        _, grayImage = cv2.threshold(grayImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+        # _, grayImage = cv2.threshold(grayImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
+        cv2.imshow("image",grayImage)
+        cv2.waitKey(1)
+
         cv2.aruco_dict = cv2.aruco.Dictionary_get(self.arucoMarkerType)
         parameters = cv2.aruco.DetectorParameters_create()
 

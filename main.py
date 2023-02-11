@@ -4,7 +4,7 @@ from position.arucoDetection import arucoDetection
 from position.optitrack import Optitrack
 
 def detect():
-	estimator = arucoDetection()
+	estimator = arucoDetection(arucoMarkerSize=0.06)
 	while not estimator.setOrigin(1):
 		pass
 	while True:
@@ -15,19 +15,19 @@ def detect():
 def hover():
 	# estimator = Optitrack(hostname="10.250.60.47")
 	estimator = arucoDetection(arucoMarkerSize=0.04)
-	posHold = PosHold(estimator, host="10.250.60.89")
+	posHold = PosHold(estimator)
 
 	posHold.drone.arm()
-	posHold.hold([0,0,1], 5)
-	posHold.hold([2,0,1], 5)
-	posHold.hold([2,1,1], 5)
-	posHold.hold([0,1,1], 5)
-	posHold.hold([0,0,1], 5)
+	posHold.hold([0,0,0.5], 15)
+	# posHold.hold([2,0,1], 5)
+	# posHold.hold([2,1,1], 5)
+	# posHold.hold([0,1,1], 5)
+	# posHold.hold([0,0,1], 5)
 	posHold.drone.land()
 	sleep(1)
 	posHold.drone.disarm()
 
 
 if __name__ == "__main__":
-	# hover()
-	detect()
+	hover()
+	# detect()
