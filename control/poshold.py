@@ -32,7 +32,8 @@ class PosHold:
 		kp, ki, kd = 105, 3, 60		# 80, 5, 0.1
 		self.pidx = PID(kp, ki, kd, setpoint=self.pos[0])
 		self.pidy = PID(kp, ki, kd, setpoint=self.pos[1])
-		self.pidz = PID(180, 20, 55, setpoint=self.pos[2])
+		# self.pidz = PID(180, 20, 55, setpoint=self.pos[2])
+		self.pidz = PID(500, 70, 55, setpoint=self.pos[2])
 
 		if self.record:
 			self.hist["pid"] = {"kp": kp, "ki": ki, "kd": kd}
@@ -40,7 +41,8 @@ class PosHold:
 		# Set PID controller output limits
 		self.pidx.output_limits = (-500, 500)
 		self.pidy.output_limits = (-500, 500)
-		self.pidz.output_limits = (-700, 300)
+		# self.pidz.output_limits = (-700, 300)
+		self.pidz.output_limits = (-500, 500)
 
 		# Set PID controller sample time
 		herz = 30
@@ -81,6 +83,10 @@ class PosHold:
 			if math.isnan(x) or math.isnan(y) or math.isnan(z):
 				self.drone.rc(1500, 1500, 1500, 1500, althold=True)
 				continue
+	
+			# if (abs(self.pos[2] - z) < 0.01):
+				# self.pidz.set_auto_mode(False)
+				# print("---------------------------OFF!---------------------------------")
 
 			# PID controller
 			roll = self.pidx(x)
@@ -90,4 +96,4 @@ class PosHold:
 				self.hist["control"].append((int(roll), int(pitch), int(throttle)))
 
 			# Send commands to drone
-			self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1700 + int(throttle), 1500)
+			self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1500 + int(throttle), 1500, althold=True)

@@ -28,8 +28,12 @@ class arucoDetection:
         # self.distortion = np.array((-0.312501, 0.074840, -0.007301, 0.002798, 0.000000))
 
         # new webcam 2.0
-        self.intrinsicCamera = np.array(((609.83274, 0., 268.45318), (0., 583.1485, 202.54002), (0., 0., 1.)))
-        self.distortion = np.array((-0.417462, 0.177596, 0.021865, 0.019743, 0.000000))
+        # self.intrinsicCamera = np.array(((609.83274, 0., 268.45318), (0., 583.1485, 202.54002), (0., 0., 1.)))
+        # self.distortion = np.array((-0.417462, 0.177596, 0.021865, 0.019743, 0.000000))
+
+        # new webcam 3.0
+        self.intrinsicCamera = np.array(((689.350221, 0.000000, 342.497364), (0.000000, 673.958751, 341.750687), (0.000000, 0.000000, 1.000000)))
+        self.distortion = np.array((-0.306115, 0.144417, 0.011859, 0.002701, 0.000000))
 
         self.origin = None
         if(len(camUrl) == 0):
