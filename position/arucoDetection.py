@@ -35,7 +35,9 @@ class arucoDetection:
         self.intrinsicCamera = np.array(((689.350221, 0.000000, 342.497364), (0.000000, 673.958751, 341.750687), (0.000000, 0.000000, 1.000000)))
         self.distortion = np.array((-0.306115, 0.144417, 0.011859, 0.002701, 0.000000))
 
-        self.origin = None
+        self.origin = {}
+        self.img = None
+        self.poses = {}
         if(len(camUrl) == 0):
             self.cap =  cv2.VideoCapture(4, cv2.CAP_V4L2)
             self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'))
@@ -49,60 +51,16 @@ class arucoDetection:
     
     def setOrigin(self,arucoId):
 
-        if(len(self.camUrl)):
-            image = requests.get(self.camUrl)
-            imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-            image = cv2.imdecode(imgageArray, -1)
-        else:
-            ret, image = self.cap.read()
-
-        estimatedPose = self.__estimatePose(image, arucoId)
-
-
-        if(len(estimatedPose)):
-            self.origin = estimatedPose
+        estimatedPose = self.poses[arucoId]
+        if len(estimatedPose):
+            self.origin[arucoId] = estimatedPose
             return True
         
         print("No Aruco Marker detected with id : ",arucoId)
         return False
-
-    # Changing coordinate system from camera to drone
-    def _changeCoordinate(self, ori,x,y,z):
-        print((-x*3.28084,-y*3.28084,-z*3.28084))
-        return [ori,[-x*3.28084,-y*3.28084,-z*3.28084]]
-        # return [ori,[-x, -y, -z*2]]
-
-    def getPose(self, arucoId):
-
-
-        if(len(self.camUrl)):
-            image = requests.get(self.camUrl)
-            imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
-            image = cv2.imdecode(imgageArray, -1)
-        else:
-            ret, image = self.cap.read()
-        
-        # return -1
-
-
-        estimatedPose = self.__estimatePose(image, arucoId)
-
-
-
-        # return estimatedPose
-        
-        if(len(estimatedPose) and self.origin != None):
-            ori, (x,y,z) = self.__relativePosition(estimatedPose)
-            return self._changeCoordinate(ori,x,y,z)
-
-        print("No Aruco Marker detected with id : ",arucoId)
-        return nan, (nan, nan, nan)
-
-
-
     
-    def __estimatePose(self, image, arucoId):
-        grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    def detectMarkers(self):
+        grayImage = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         # _, grayImage = cv2.threshold(grayImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
         cv2.imshow("image",grayImage)
@@ -117,14 +75,42 @@ class arucoDetection:
         
         if len(corners):
             for i in range(len(ids)):
-                if(ids[i] == arucoId):
-                    rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i],self.arucoMarkerSize, self.intrinsicCamera,self.distortion)
-                    return [rvec, tvec]                                                     
-        return []
+                rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i],self.arucoMarkerSize, self.intrinsicCamera,self.distortion)
+                self.poses[ids[i]] = [rvec, tvec] 
+        
+
+    def getImage(self):
+        if(len(self.camUrl)):
+            image = requests.get(self.camUrl)
+            imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
+            image = cv2.imdecode(imgageArray, -1)
+        else:
+            ret, image = self.cap.read()
+        
+        self.img = image
+        self.detectMarkers()
+
+
+    # Changing coordinate system from camera to drone
+    def _changeCoordinate(self, ori,x,y,z):
+        print((-x*3.28084,-y*3.28084,-z*3.28084))
+        return [ori,[-x*3.28084,-y*3.28084,-z*3.28084]]
+        # return [ori,[-x, -y, -z*2]]
+
+
+    def getPose(self, arucoId):
+
+        estimatedPose = self.poses[arucoId]
+        if len(estimatedPose):
+            ori, (x,y,z) = self.__relativePosition(estimatedPose, arucoId)
+            return self._changeCoordinate(ori,x,y,z)
+
+        print("No Aruco Marker detected with id : ",arucoId)
+        return nan, (nan, nan, nan)
 
     
-    def __relativePosition(self, estimatedPose):
-        rvec1, tvec1 = self.origin[0].reshape((3,1)), self.origin[1].reshape((3,1))
+    def __relativePosition(self, estimatedPose, arucoId):
+        rvec1, tvec1 = self.origin[arucoId][0].reshape((3,1)), self.origin[arucoId][1].reshape((3,1))
         rvec2, tvec2 = estimatedPose[0].reshape((3, 1)), estimatedPose[1].reshape((3, 1))
 
         invRvec, invTvec = self.inversePerspective(rvec2, tvec2)
