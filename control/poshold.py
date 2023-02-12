@@ -24,6 +24,7 @@ class PIDControl:
 
 		# Set origin
 		while not self.estimator.setOrigin(self.id):
+			self.estimator.getImage()
 			print("Setting origin")
 		print("Origin Set!")
 		self.drone = Pluto(host)
@@ -46,7 +47,7 @@ class PIDControl:
 		self.pidz.output_limits = (-500, 500)
 
 		# Set PID controller sample time
-		herz = 15
+		herz = 20
 		self.pidx.sample_time = 1/herz
 		self.pidy.sample_time = 1/herz
 		self.pidz.sample_time = 1/herz
@@ -71,7 +72,10 @@ class PIDControl:
 		self.pidy.setpoint = self.pos[1]
 		self.pidz.setpoint = self.pos[2]
 
+
+		self.estimator.getImage()
 		ori, (x, y, z) = self.estimator.getPose(self.id)
+		print(f"{self.id}:{(x, y, z)}")
 		if self.record:
 			self.hist["pos"].append((float(x), float(y), float(z)))
 
@@ -96,6 +100,7 @@ class PIDControl:
 
 		# Send commands to drone
 		self.drone.rc(1500 + int(roll), 1500 + int(pitch), 1500 + int(throttle), 1500, althold=True)
+		return True
 	
 
 class PosHold:
@@ -106,14 +111,13 @@ class PosHold:
 	:param pos: Position to be held.
 	:param host: IP Address of the drone.
 	'''
-	def __init__(self, estimator, ids=[1], poses=[[0,0,1]], hosts=["192.168.4.1"]):
+	def __init__(self, estimator, ids=[1], hosts=["192.168.4.1"]):
 		self.record = False
 		self.estimator = estimator
 		self.PIDControls = []
 		
-		self.estimator.getImage()
-		for id, pos, hold in zip(ids, poses, hosts):
-			self.PIDControls.append(PIDControl(estimator, id, pos, hold))
+		for id, host in zip(ids, hosts):
+			self.PIDControls.append(PIDControl(estimator, id, host=host))
 
 	def __del__(self):
 		if self.record:
@@ -129,6 +133,6 @@ class PosHold:
 		'''
 		start = time()
 		while time() < start + duration:
-			self.estimator.getImage()
 			for PIDControl, pos in zip(self.PIDControls, poses):
-				PIDControl.run(pos)
+				if not PIDControl.run(pos):
+					break

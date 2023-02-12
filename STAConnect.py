@@ -4,7 +4,7 @@ from telnetlib import Telnet
 from time import sleep
 
 host, port = "192.168.4.1", 23
-ssid, password = "control_lab", "12345678"
+ssid, password = "Arvind", "12345678"
 
 tn = Telnet(host, port)
 

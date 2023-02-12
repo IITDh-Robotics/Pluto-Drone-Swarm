@@ -76,11 +76,12 @@ class arucoDetection:
         if len(corners):
             for i in range(len(ids)):
                 rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(corners[i],self.arucoMarkerSize, self.intrinsicCamera,self.distortion)
-                self.poses[ids[i]] = [rvec, tvec] 
+                self.poses[int(ids[i])] = [rvec, tvec] 
         
 
     def getImage(self):
         self.poses = {}
+
         if(len(self.camUrl)):
             image = requests.get(self.camUrl)
             imgageArray = np.array(bytearray(image.content), dtype=np.uint8)
@@ -94,7 +95,6 @@ class arucoDetection:
 
     # Changing coordinate system from camera to drone
     def _changeCoordinate(self, ori,x,y,z):
-        print((-x*3.28084,-y*3.28084,-z*3.28084))
         return [ori,[-x*3.28084,-y*3.28084,-z*3.28084]]
         # return [ori,[-x, -y, -z*2]]
 
