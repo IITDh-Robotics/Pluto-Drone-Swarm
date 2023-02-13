@@ -47,7 +47,7 @@ class PIDControl:
 		self.pidz.output_limits = (-500, 500)
 
 		# Set PID controller sample time
-		herz = 20
+		herz = 10
 		self.pidx.sample_time = 1/herz
 		self.pidy.sample_time = 1/herz
 		self.pidz.sample_time = 1/herz
